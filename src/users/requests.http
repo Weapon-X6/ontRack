@@ -3,8 +3,17 @@ POST http://localhost:3000/auth/signup
 Content-Type: application/json
 
 {
-    "email": "ohne@nicht.de",
-    "password": "t"
+    "email": "dezember2023@ohms.de",
+    "password": "_IKnowYourFate_"
+}
+
+### sign in
+POST http://localhost:3000/auth/signin
+Content-Type: application/json
+
+{
+    "email": "dezember2023@ohms.de",
+    "password": "_IKnowYourFate_"
 }
 
 ###
