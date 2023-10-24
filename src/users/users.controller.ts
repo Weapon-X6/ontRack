@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   NotFoundException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { Session } from '@nestjs/common/decorators/http';
 import { CreateUserDto } from './dtos/create-user.dto';
@@ -16,9 +17,13 @@ import { UsersService } from './users.service';
 import { Serialize } from 'src/interceptors/serialize.interceptor';
 import { UserDto } from './dtos/user.dto';
 import { AuthService } from './auth.service';
+import { CurrentUser } from './decorators/current-user.decorator';
+import { CurrentUserInterceptor } from './interceptors/current-user.interceptor';
+import { User } from './user.entitiy';
 
-@Serialize(UserDto)
 @Controller('auth')
+@Serialize(UserDto)
+@UseInterceptors(CurrentUserInterceptor)
 export class UsersController {
   constructor(
     private usersService: UsersService,
@@ -40,11 +45,16 @@ export class UsersController {
   }
 
   @Get('/whoami')
-  whoami(@Session() session: any) {
+  whoAmI(@Session() session: any) {
     if (!session.userId) {
       throw new NotFoundException('user not found');
     }
     return this.usersService.findOne(session.userId);
+  }
+
+  @Get('/whoami2')
+  whoAmI2(@CurrentUser() user: User) {
+    return user;
   }
 
   @Post('/signout')
